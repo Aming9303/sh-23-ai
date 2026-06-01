@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户在线咨询问卷 - AI微环境情绪园艺师</title>
+    <style>
+        :root {
+            --primary-green: #4a9b7f;
+            --secondary-green: #e8f5f0;
+            --accent-terracotta: #c75b39;
+            --text-dark: #2d3a2f;
+            --text-light: #5a6d60;
+            --background: #fafcfa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), #2d7a60);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: var(--accent-terracotta);
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .required::after {
+            content: ' *';
+            color: var(--accent-terracotta);
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: white;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(74, 155, 127, 0.1);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            background: var(--secondary-green);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .checkbox-item:hover,
+        .radio-item:hover {
+            background: #d4ede6;
+        }
+        
+        .checkbox-item input,
+        .radio-item input {
+            margin-right: 8px;
+            accent-color: var(--primary-green);
+        }
+        
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            background: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary-green);
+        }
+        
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-green);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .file-upload p {
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+        
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .file-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        
+        .file-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .file-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-terracotta);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .emotion-scale {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f9f7;
+            border-radius: 6px;
+        }
+        
+        .emotion-scale .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .submit-section {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .submit-btn {
+            background: var(--accent-terracotta);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: #b5512e;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .note {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-left: 4px solid var(--primary-green);
+        }
+        
+        .privacy-note {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+        
+        .result-container {
+            display: none;
+            padding: 30px;
+            background: #f9faf9;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .result-container h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+        
+        .json-display {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .copy-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn:hover {
+            background: #2d7a60;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 8px;
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                padding: 14px 20px;
+            }
+            
+            .emotion-scale {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+
+<style id="openclaw-injected">
+/* 咨询弹窗 */
+.oc-modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;justify-content:center;align-items:center}
+.oc-modal-overlay.active{display:flex}
+.oc-modal{background:#fff;border-radius:16px;padding:40px;max-width:480px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.oc-modal h2{margin:0 0 8px;font-size:22px}
+.oc-modal p{color:#666;margin:0 0 24px;font-size:14px}
+.oc-modal label{display:block;margin-bottom:4px;font-size:14px;font-weight:600}
+.oc-modal input,.oc-modal textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;margin-bottom:16px;font-size:14px;box-sizing:border-box}
+.oc-modal textarea{height:80px;resize:vertical}
+.oc-modal .oc-submit{width:100%;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.oc-modal .oc-submit:hover{background:#1d4ed8}
+.oc-modal .oc-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#999}
+.oc-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 24px;border-radius:8px;z-index:10000;display:none;font-size:14px}
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI微环境情绪园艺师 · 客户在线咨询问卷</h1>
+            <p>填写此问卷，让我们为您量身定制专属的植物情绪疗愈方案</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="consultationForm" onsubmit="handleSubmit(event)">
+                <!-- 第一部分：基本信息 -->
+                <div class="section">
+                    <div class="section-title">基本信息</div>
+                    
+                    <div class="form-group">
+                        <label for="name" class="required">姓名</label>
+                        <input type="text" id="name" name="name" required placeholder="请输入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact" class="required">联系方式（手机/微信）</label>
+                        <input type="tel" id="contact" name="contact" required placeholder="方便我们与您联系">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">电子邮箱（选填）</label>
+                        <input type="email" id="email" name="email" placeholder="用于接收方案文档">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city" class="required">所在城市</label>
+                        <input type="text" id="city" name="city" required placeholder="以便推荐适合当地气候的植物">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occupation">职业（选填）</label>
+                        <input type="text" id="occupation" name="occupation" placeholder="帮助我们了解您的生活/工作状态">
+                    </div>
+                </div>
+                
+                <!-- 第二部分：空间信息 -->
+                <div class="section">
+                    <div class="section-title">空间信息</div>
+                    
+                    <div class="form-group">
+                        <label class="required">空间类型</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="space-home" name="spaceType" value="家庭空间" required>
+                                <label for="space-home">家庭空间</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="space-office" name="spaceType" value="办公空间">
+                                <label for="space-office">办公空间</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="space-commercial" name="spaceType" value="商业空间">
+                                <label for="space-commercial">商业空间</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="spaceName" class="required">具体空间名称</label>
+                        <input type="text" id="spaceName" name="spaceName" required placeholder="如：客厅、卧室、办公室工位、会议室等">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="spaceArea">空间面积（平方米，选填）</label>
+                        <input type="number" id="spaceArea" name="spaceArea" placeholder="估算值即可">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="spacePhotos">上传空间照片（最多3张）</label>
+                        <div class="file-upload">
+                            <p>拍摄1-3张能展示空间整体布局和光线条件的照片</p>
+                            <input type="file" id="spacePhotos" name="spacePhotos" multiple accept="image/*" onchange="handleFileSelect(this)">
+                            <label for="spacePhotos">选择照片</label>
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lightCondition">空间光线条件</label>
+                        <select id="lightCondition" name="lightCondition">
+                            <option value="">请选择</option>
+                            <option value="充足日照">充足日照（每天4小时以上直射光）</option>
+                            <option value="明亮散射">明亮散射光（无直射但明亮）</option>
+                            <option value="一般光线">一般光线（白天无需开灯）</option>
+                            <option value="较暗空间">较暗空间（白天也需要辅助照明）</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="spaceUsage">空间主要用途</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="use-work" name="spaceUsage" value="工作学习">
+                                <label for="use-work">工作/学习</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="use-rest" name="spaceUsage" value="休息放松">
+                                <label for="use-rest">休息放松</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="use-entertainment" name="spaceUsage" value="娱乐社交">
+                                <label for="use-entertainment">娱乐社交</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="use-create" name="spaceUsage" value="创意创造">
+                                <label for="use-create">创意创造</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第三部分：情绪与健康目标 -->
+                <div class="section">
+                    <div class="section-title">情绪与健康目标</div>
+                    
+                    <div class="form-group">
+                        <label>您希望提升的情绪状态（可多选）</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-relax" name="emotionGoals" value="放松减压">
+                                <label for="emo-relax">放松减压</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-focus" name="emotionGoals" value="专注高效">
+                                <label for="emo-focus">专注高效</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-energy" name="emotionGoals" value="活力充沛">
+                                <label for="emo-energy">活力充沛</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-happy" name="emotionGoals" value="愉悦快乐">
+                                <label for="emo-happy">愉悦快乐</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-peace" name="emotionGoals" value="平静安宁">
+                                <label for="emo-peace">平静安宁</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emo-creative" name="emotionGoals" value="激发创意">
+                                <label for="emo-creative">激发创意</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>您当前的情绪状态评估（1-5分，1分为非常低落，5分为非常愉悦）</label>
+                        <div class="emotion-scale">
+                            <span class="label">低落（1）</span>
+                            <input type="range" class="range-slider" id="currentMood" name="currentMood" min="1" max="5" value="3">
+                            <span class="label">愉悦（5）</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>您关注的健康目标（可多选）</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="health-air" name="healthGoals" value="改善空气质量">
+                                <label for="health-air">改善空气质量</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="health-humidity" name="healthGoals" value="调节湿度">
+                                <label for="health-humidity">调节湿度</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="health-sleep" name="healthGoals" value="改善睡眠">
+                                <label for="health-sleep">改善睡眠</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="health-stress" name="healthGoals" value="缓解压力">
+                                <label for="health-stress">缓解压力</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="health-allergy" name="healthGoals" value="减少过敏">
+                                <label for="health-allergy">减少过敏</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>您是否有植物养护经验？</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="exp-none" name="plantExperience" value="无经验" required>
+                                <label for="exp-none">无经验</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="exp-beginner" name="plantExperience" value="初学者">
+                                <label for="exp-beginner">初学者（养过1-2种）</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="exp-intermediate" name="plantExperience" value="有经验">
+                                <label for="exp-intermediate">有经验（养过多种）</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="exp-advanced" name="plantExperience" value="植物爱好者">
+                                <label for="exp-advanced">植物爱好者</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第四部分：其他信息 -->
+                <div class="section">
+                    <div class="section-title">其他信息</div>
+                    
+                    <div class="form-group">
+                        <label for="budget">预算范围（单次服务）</label>
+                        <select id="budget" name="budget">
+                            <option value="">请选择</option>
+                            <option value="500-1000元">500-1000元（基础方案）</option>
+                            <option value="1000-3000元">1000-3000元（标准方案）</option>
+                            <option value="3000-5000元">3000-5000元（高级方案）</option>
+                            <option value="5000元以上">5000元以上（定制方案）</option>
+                            <option value="暂不确定">暂不确定，想先了解</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specialNeeds">特殊需求或备注</label>
+                        <textarea id="specialNeeds" name="specialNeeds" placeholder="例如：对特定植物过敏、有宠物或小孩、空间风格偏好等"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>您是如何了解到我们的？</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="source-xiaohongshu" name="source" value="小红书">
+                                <label for="source-xiaohongshu">小红书</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="source-bilibili" name="source" value="B站">
+                                <label for="source-bilibili">B站</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="source-zhihu" name="source" value="知乎">
+                                <label for="source-zhihu">知乎</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="source-friend" name="source" value="朋友推荐">
+                                <label for="source-friend">朋友推荐</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="source-other" name="source" value="其他">
+                                <label for="source-other">其他</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <strong>温馨提示：</strong>完成问卷后，我们的园艺师将在24小时内通过您留下的联系方式与您沟通，初步了解需求后为您制定个性化方案。
+                </div>
+                
+                <div class="privacy-note">
+                    <p>我们承诺严格保护您的隐私信息，所有数据仅用于定制服务，不会泄露给第三方。</p>
+                </div>
+                
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">提交咨询问卷</button>
+                </div>
+            </form>
+            
+            <div class="result-container" id="resultContainer">
+                <h3>✅ 问卷提交成功！</h3>
+                <p>以下是您提交的结构化数据，请保存此信息以便后续沟通：</p>
+                <div class="json-display" id="jsonDisplay"></div>
+                <button class="copy-btn" onclick="copyToClipboard()">复制JSON数据</button>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
+                    您也可以将此JSON数据发送给我们的客服微信，加快服务流程。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储上传的文件数据
+        let uploadedFiles = [];
+        
+        // 处理文件选择
+        function handleFileSelect(input) {
+            const preview = document.getElementById('filePreview');
+            const files = input.files;
+            
+            if (files.length + uploadedFiles.length > 3) {
+                alert('最多只能上传3张照片');
+                input.value = '';
+                return;
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // 检查文件大小（限制2MB）
+                if (file.size > 2 * 1024 * 1024) {
+                    alert(`文件 ${file.name} 太大，请选择小于2MB的图片`);
+                    continue;
+                }
+                
+                // 检查是否已存在
+                if (uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    continue;
+                }
+                
+                uploadedFiles.push(file);
+                
+                // 创建预览
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.dataset.index = uploadedFiles.length - 1;
+                    
+                    fileItem.innerHTML = `
+                        <img src="${e.target.result}" alt="${file.name}">
+                        <button class="file-remove" onclick="removeFile(${uploadedFiles.length - 1}, this)">×</button>
+                    `;
+                    
+                    preview.appendChild(fileItem);
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            input.value = '';
+        }
+        
+        // 移除文件
+        function removeFile(index, btn) {
+            uploadedFiles.splice(index, 1);
+            const fileItem = btn.parentElement;
+            fileItem.remove();
+            
+            // 更新剩余文件的索引
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach((item, i) => {
+                item.dataset.index = i;
+                const removeBtn = item.querySelector('.file-remove');
+                removeBtn.onclick = function() {
+                    removeFile(i, this);
+                };
+            });
+        }
+        
+        // 处理表单提交
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // 收集表单数据
+            const formData = new FormData(document.getElementById('consultationForm'));
+            const data = {};
+            
+            // 处理普通字段
+            for (const [key, value] of formData.entries()) {
+                if (key !== 'spacePhotos') {
+                    // 处理复选框
+                    if (data[key]) {
+                        if (Array.isArray(data[key])) {
+                            data[key].push(value);
+                        } else {
+                            data[key] = [data[key], value];
+                        }
+                    } else {
+                        data[key] = value;
+                    }
+                }
+            }
+            
+            // 处理文件（转为Base64字符串）
+            const filesPromises = uploadedFiles.map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        resolve({
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            data: e.target.result.split(',')[1] // 只保留base64部分
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            Promise.all(filesPromises).then(filesData => {
+                data.spacePhotos = filesData;
+                
+                // 添加提交时间
+                data.submittedAt = new Date().toISOString();
+                
+                // 显示结果
+                displayResult(data);
+                
+                // 滚动到结果区域
+                document.getElementById('resultContainer').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        // 显示结果
+        function displayResult(data) {
+            const jsonDisplay = document.getElementById('jsonDisplay');
+            const resultContainer = document.getElementById('resultContainer');
+            
+            // 格式化JSON显示
+            jsonDisplay.textContent = JSON.stringify(data, null, 2);
+            resultContainer.style.display = 'block';
+            
+            // 隐藏表单
+            document.getElementById('consultationForm').style.display = 'none';
+        }
+        
+        // 复制到剪贴板
+        function copyToClipboard() {
+            const jsonDisplay = document.getElementById('jsonDisplay');
+            const textarea = document.createElement('textarea');
+            textarea.value = jsonDisplay.textContent;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            alert('已复制到剪贴板！您可以粘贴给客服微信。');
+        }
+        
+        // 页面加载时的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为范围滑块添加实时显示
+            const moodSlider = document.getElementById('currentMood');
+            const scaleLabels = document.querySelectorAll('.emotion-scale .label');
+            
+            moodSlider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const labels = ['非常低落', '较低落', '一般', '较愉悦', '非常愉悦'];
+                
+                // 更新标签显示（可选）
+                // console.log(`当前情绪评分: ${value} (${labels[value-1]})`);
+            });
+        });
+    </script>
+
+<!-- 咨询弹窗 -->
+<div class="oc-modal-overlay" id="ocModal">
+  <div class="oc-modal">
+    <button class="oc-close" onclick="closeModal()">&times;</button>
+    <h2>免费咨询</h2>
+    <p>留下您的信息，我们将在24小时内与您联系</p>
+    <form id="ocForm" onsubmit="submitForm(event)">
+      <label>姓名</label>
+      <input type="text" id="ocName" placeholder="您的称呼" required>
+      <label>联系方式（微信/手机/邮箱）</label>
+      <input type="text" id="ocContact" placeholder="方便联系您的方式" required>
+      <label>需求描述</label>
+      <textarea id="ocMessage" placeholder="简单描述您的需求..."></textarea>
+      <button type="submit" class="oc-submit">提交咨询</button>
+    </form>
+  </div>
+</div>
+<div class="oc-toast" id="ocToast">提交成功！我们会尽快联系您</div>
+
+<script>
+// 咨询弹窗
+function openModal(){document.getElementById('ocModal').classList.add('active')}
+function closeModal(){document.getElementById('ocModal').classList.remove('active')}
+document.getElementById('ocModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+// 表单提交 → 通过 mailto 发送（不暴露任何 API 密钥）
+function submitForm(e){
+  e.preventDefault();
+  var name=document.getElementById('ocName').value;
+  var contact=document.getElementById('ocContact').value;
+  var msg=document.getElementById('ocMessage').value;
+  var subject=encodeURIComponent('[Landing Page] '+name+' 咨询');
+  var body=encodeURIComponent('姓名: '+name+'\n联系方式: '+contact+'\n需求: '+msg);
+  window.location.href='mailto:liuhongming@xfuture.cc?subject='+subject+'&body='+body;
+  document.getElementById('ocToast').style.display='block';
+  setTimeout(function(){document.getElementById('ocToast').style.display='none'},3000);
+  closeModal();
+  document.getElementById('ocForm').reset();
+}
+
+// 绑定所有按钮
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('button').forEach(function(btn){
+    var t=btn.textContent.trim();
+    if(!btn.onclick && !btn.getAttribute('onclick')){
+      if(t.match(/咨询|诊断|开始|预约|选择|联系|试用/)){
+        btn.addEventListener('click',openModal);
+      }else if(t.match(/了解更多|服务细节|手册/)){
+        var target=document.getElementById('features')||document.getElementById('process');
+        if(target){btn.addEventListener('click',function(){target.scrollIntoView({behavior:'smooth'})});}
+        else{btn.addEventListener('click',openModal);}
+      }
+    }
+  });
+  document.querySelectorAll('a[href="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();openModal()});
+  });
+});
+</script>
+</body>
+</html>

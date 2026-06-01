@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI微环境情绪园艺师 | 用数据与绿意，重塑空间情绪</title>
+    <style>
+        /* 全局样式重置与基础设置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* 导航栏样式 */
+        nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 0; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #2c8c6f; text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #2c8c6f; }
+
+        /* 头部英雄区域 */
+        .hero { padding: 150px 0 100px; text-align: center; background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(44, 140, 111, 0.1) 0%, transparent 60%); animation: pulse 8s infinite linear; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 0.9; } 100% { transform: scale(1); opacity: 0.7; } }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: #1a5c3a; position: relative; z-index: 1; }
+        .hero p { font-size: 1.3rem; color: #555; max-width: 700px; margin: 0 auto 40px; position: relative; z-index: 1; }
+        .btn { display: inline-block; background: linear-gradient(135deg, #2c8c6f, #1a7a5a); color: white; padding: 16px 40px; border-radius: 50px; text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; position: relative; z-index: 1; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(44, 140, 111, 0.3); }
+
+        /* 段落通用标题样式 */
+        .section-title { text-align: center; font-size: 2.5rem; color: #1a5c3a; margin-bottom: 50px; }
+        .section-title span { color: #ff8f00; }
+        section { padding: 100px 0; }
+
+        /* 服务亮点部分 */
+        .features { background: white; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .feature-card { text-align: center; padding: 40px 30px; border-radius: 20px; background: linear-gradient(145deg, #f8faf9, #eef7f3); transition: transform 0.3s, box-shadow 0.3s; }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .feature-icon { font-size: 3.5rem; margin-bottom: 25px; display: block; }
+        .feature-card h3 { font-size: 1.4rem; color: #1a5c3a; margin-bottom: 15px; }
+        .feature-card p { color: #666; font-size: 1rem; }
+
+        /* 工作流程部分 */
+        .process { background: #f1f8f4; }
+        .process-steps { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 60px; position: relative; }
+        .process-steps::before { content: ''; position: absolute; top: 40px; left: 15%; width: 70%; height: 2px; background: linear-gradient(90deg, #2c8c6f, #a5d6b5); z-index: 0; }
+        .step { background: white; border-radius: 20px; padding: 30px; text-align: center; width: 220px; position: relative; z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s; }
+        .step:hover { transform: scale(1.05); }
+        .step-number { display: inline-block; width: 50px; height: 50px; background: linear-gradient(135deg, #2c8c6f, #1a7a5a); color: white; border-radius: 50%; line-height: 50px; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
+        .step h3 { margin-bottom: 10px; color: #1a5c3a; }
+        .step p { color: #666; font-size: 0.95rem; }
+
+        /* AR演示动图部分 */
+        .ar-demo { background: linear-gradient(135deg, #1a2a1f 0%, #0d3b2e 100%); color: white; text-align: center; }
+        .ar-demo .section-title { color: white; }
+        .ar-demo .section-title span { color: #ff8f00; }
+        .ar-gif-container { max-width: 800px; margin: 0 auto 40px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); position: relative; }
+        .ar-gif-container img { width: 100%; display: block; }
+        .ar-gif-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(transparent 60%, rgba(0,0,0,0.8) 100%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 30px; }
+        .ar-gif-overlay p { font-size: 1.2rem; font-weight: 500; color: #ff8f00; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        /* 定价部分 */
+        .pricing { background: white; }
+        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: center; }
+        .pricing-card { background: #f9fbfc; border-radius: 25px; padding: 45px 35px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; position: relative; overflow: hidden; }
+        .pricing-card.popular { background: linear-gradient(135deg, #f8fff8, #e8ffe8); border: 3px solid #2c8c6f; transform: scale(1.05); }
+        .popular-badge { position: absolute; top: 20px; right: -35px; background: #ff8f00; color: white; padding: 5px 40px; font-size: 0.8rem; font-weight: bold; transform: rotate(45deg); }
+        .pricing-card h3 { font-size: 1.6rem; color: #1a5c3a; margin-bottom: 10px; }
+        .price { font-size: 3rem; font-weight: 700; color: #1a5c3a; margin: 20px 0; }
+        .price span { font-size: 1rem; color: #888; font-weight: normal; }
+        .pricing-card ul { list-style: none; margin: 30px 0; text-align: left; }
+        .pricing-card li { padding: 10px 0; border-bottom: 1px dashed #e0e0e0; color: #555; display: flex; align-items: center; gap: 10px; }
+        .pricing-card li::before { content: '✓'; color: #2c8c6f; font-weight: bold; }
+        .pricing-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .pricing-card.popular:hover { transform: scale(1.05) translateY(-10px); }
+
+        /* 客户证言部分 */
+        .testimonials { background: #f1f8f4; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .testimonial-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .testimonial-text { font-style: italic; color: #555; font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; position: relative; }
+        .testimonial-text::before { content: '"'; font-size: 5rem; color: #2c8c6f; position: absolute; top: -30px; left: -10px; opacity: 0.2; font-family: serif; }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .author-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #2c8c6f, #a5d6b5); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
+        .author-info h4 { color: #1a5c3a; margin-bottom: 3px; }
+        .author-info p { color: #888; font-size: 0.9rem; }
+
+        /* 最终行动号召部分 */
+        .cta { text-align: center; padding: 120px 0; background: linear-gradient(135deg, #2c8c6f, #1a5c3a); color: white; }
+        .cta h2 { font-size: 2.8rem; margin-bottom: 20px; }
+        .cta p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 40px; }
+        .btn-white { background: white; color: #1a5c3a; }
+        .btn-white:hover { box-shadow: 0 10px 30px rgba(255,255,255,0.3); }
+
+        /* 页脚样式 */
+        footer { background: #1a2a1f; color: #ccc; text-align: center; padding: 40px 0; font-size: 0.9rem; }
+        footer a { color: #2c8c6f; text-decoration: none; }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .nav-links { display: none; } /* 简化处理，小屏隐藏导航链接 */
+            .process-steps::before { display: none; }
+            .pricing-card.popular { transform: scale(1); }
+            .pricing-card.popular:hover { transform: translateY(-10px); }
+        }
+    </style>
+
+<style id="openclaw-injected">
+/* 咨询弹窗 */
+.oc-modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;justify-content:center;align-items:center}
+.oc-modal-overlay.active{display:flex}
+.oc-modal{background:#fff;border-radius:16px;padding:40px;max-width:480px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.oc-modal h2{margin:0 0 8px;font-size:22px}
+.oc-modal p{color:#666;margin:0 0 24px;font-size:14px}
+.oc-modal label{display:block;margin-bottom:4px;font-size:14px;font-weight:600}
+.oc-modal input,.oc-modal textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;margin-bottom:16px;font-size:14px;box-sizing:border-box}
+.oc-modal textarea{height:80px;resize:vertical}
+.oc-modal .oc-submit{width:100%;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.oc-modal .oc-submit:hover{background:#1d4ed8}
+.oc-modal .oc-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#999}
+.oc-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 24px;border-radius:8px;z-index:10000;display:none;font-size:14px}
+</style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">AI情绪园艺师</a>
+            <ul class="nav-links">
+                <li><a href="#features">服务亮点</a></li>
+                <li><a href="#process">工作流程</a></li>
+                <li><a href="#ar-demo">AR演示</a></li>
+                <li><a href="#pricing">定价方案</a></li>
+                <li><a href="#testimonials">客户评价</a></li>
+                <li><a href="#contact" class="btn">立即咨询</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 头部英雄区域 -->
+    <header class="hero" id="home">
+        <div class="container">
+            <h1>为您的空间，注入数据驱动的生命力</h1>
+            <p>结合前沿AI情绪分析与智能传感数据，我们为您量身定制植物组合与空间布局方案，科学提升家庭与办公环境的情绪价值与美学体验。</p>
+            <a href="#contact" class="btn">预约免费空间情绪评估</a>
+        </div>
+    </header>
+
+    <!-- 服务亮点部分 -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">为何选择 <span>AI微环境情绪园艺师</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🧠</span>
+                    <h3>AI情绪洞察</h3>
+                    <p>利用计算机视觉与情绪识别算法，分析空间使用者的微表情与行为模式，精准定位情绪需求痛点。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>传感器数据赋能</h3>
+                    <p>整合光照、温湿度、空气成分等实时环境数据，为植物选择与养护提供客观、科学的决策依据。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌿</span>
+                    <h3>个性化植物处方</h3>
+                    <p>不止于美观。根据您的情绪目标（如减压、提神、激发创造力），开具专属的“植物情绪处方”。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🖥️</span>
+                    <h3>AR预览体验</h3>
+                    <p>方案实施前，通过增强现实技术，让您在手机上直观预览植物在未来空间中的真实效果与氛围。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工作流程部分 -->
+    <section class="process" id="process">
+        <div class="container">
+            <h2 class="section-title">科学又贴心的 <span>四步服务</span></h2>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>深度咨询与数据采集</h3>
+                    <p>在线访谈，了解您的空间用途、生活习惯与情绪诉求，并指导您完成基础环境数据采集。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI分析与方案设计</h3>
+                    <p>我们的AI系统分析数据，结合环境心理学与园艺学，为您生成多个定制化布局与植物组合方案。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>AR演示与方案确认</h3>
+                    <p>您将通过AR动态效果图预览方案，并提出修改意见，直至最终确认完全满意的方案。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>采购指导与养护支持</h3>
+                    <p>提供详细的植物采购清单、摆放指南及长期养护知识库，助您轻松实现方案并持续受益。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AR方案演示动图部分 -->
+    <section class="ar-demo" id="ar-demo">
+        <div class="container">
+            <h2 class="section-title">所见即所得：<span>AR沉浸式方案预览</span></h2>
+            <p style="max-width: 600px; margin: -20px auto 40px; color: #c0c0c0;">我们使用增强现实（AR）技术，将设计方案直接“放入”您的真实空间，让您在下单前就能感受最终效果。</p>
+            <div class="ar-gif-container">
+                <!-- 此处应放置一张精心制作的AR效果演示GIF动图，展示植物从无到有在房间中生成的动态过程 -->
+                <img src="https://placehold.co/800x450/2c8c6f/ffffff?text=AR+演示GIF动图占位图%0A(请替换为实际制作的演示动图)" alt="AI微环境情绪园艺师AR方案演示动图">
+                <div class="ar-gif-overlay">
+                    <p>← 左右滑动查看不同空间方案演示 →</p>
+                </div>
+            </div>
+            <a href="#contact" class="btn">体验我的专属AR方案</a>
+        </div>
+    </section>
+
+    <!-- 定价部分 -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">灵活透明的 <span>三档定价</span></h2>
+            <p style="text-align: center; color: #666; max-width: 600px; margin: -30px auto 50px;">根据您的需求深度与空间规模，选择最适合的服务档位，享受高性价比的专业情绪园艺方案。</p>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>轻享基础版</h3>
+                    <div class="price">¥699 <span>/ 单次方案</span></div>
+                    <ul>
+                        <li>1个核心区域情绪分析（如书桌/沙发区）</li>
+                        <li>AI生成3种植物组合与基础布局建议</li>
+                        <li>标准版AR效果预览图（静态）</li>
+                        <li>基础养护指南PDF</li>
+                        <li>微信文字咨询（方案期内）</li>
+                    </ul>
+                    <a href="#contact" class="btn">选择此方案</a>
+                </div>
+                <div class="pricing-card popular">
+                    <span class="popular-badge">最受欢迎</span>
+                    <h3>智享标准版</h3>
+                    <div class="price">¥1999 <span>/ 单次方案</span></div>
+                    <ul>
+                        <li>整体空间（≤20㎡）情绪与环境数据全面采集</li>
+                        <li>AI生成5种定制植物组合与详细空间布局图</li>
+                        <li>高清AR动态效果演示（360°旋转预览）</li>
+                        <li>详细养护手册 + 3个月远程跟踪指导</li>
+                        <li>包含1次方案微调服务</li>
+                        <li>视频会议深度解读方案</li>
+                    </ul>
+                    <a href="#contact" class="btn" style="background: linear-gradient(135deg, #ff8f00, #e65100);">立即选择标准版</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>尊享专业版</h3>
+                    <div class="price">¥5999 <span>/ 项目起</span></div>
+                    <ul>
+                        <li>大型空间（＞20㎡）或多个房间的整体规划</li>
+                        <li>深度情绪场景构建（如专注、协作、休憩模式）</li>
+                        <li>提供智能传感器选型与布置建议</li>
+                        <li>无限次AR预览调整 + 3D全景效果图</li>
+                        <li>含1次上门/远程协助摆放指导（或等价服务）</li>
+                        <li>全年养护支持与季度植物状态复查</li>
+                        <li>专属客户经理，优先响应</li>
+                    </ul>
+                    <a href="#contact" class="btn">联系定制</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 客户证言部分 -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">听听他们如何 <span>评价我们的服务</span></h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        作为远程工作者，我的书房总是让我感到压抑。AI园艺师根据我的情绪数据和空间光照，推荐了琴叶榕和几盆薰衣草。现在走进书房，焦虑感明显下降，连专注力都提升了！AR预览太酷了，让我放心下单。
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">林</div>
+                        <div class="author-info">
+                            <h4>林女士</h4>
+                            <p>自由插画师 · 上海</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        我们公司前台和休息区一直想提升格调但无从下手。专业版方案不仅考虑了美观，更从员工情绪健康角度出发，引入了净化空气的绿植组合。方案报告非常专业，老板直接拍板，效果超出预期！
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">张</div>
+                        <div class="author-info">
+                            <h4>张经理</h4>
+                            <p>科技公司HR · 北京</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        原来摆弄花草这么有讲究！基础版对我这种阳台小白完全够用。顾问很耐心，根据我家的朝向和湿度选了特别好养的品种，还教了我很多知识。现在每天看到阳台生机勃勃的样子，心情都好了。
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">陈</div>
+                        <div class="author-info">
+                            <h4>陈同学</h4>
+                            <p>高校教师 · 杭州</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最终行动号召部分 -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2>准备好重塑您的空间情绪了吗？</h2>
+            <p>一次专业的咨询，可能为您开启一扇通往更健康、更愉悦生活与工作环境的大门。名额有限，立即行动。</p>
+            <a href="https://work.weixin.qq.com/" class="btn btn-white">添加企业微信，开启咨询</a>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">（请备注“情绪园艺”以便我们快速识别您的需求）</p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2026 AI微环境情绪园艺师 | 用数据与绿意，创造美好生活空间</p>
+            <p style="margin-top: 10px;">服务咨询请联系：<a href="mailto:contact@ai-garden.com">contact@ai-garden.com</a> 或关注公众号“AI情绪园艺师”</p>
+        </div>
+    </footer>
+
+<!-- 咨询弹窗 -->
+<div class="oc-modal-overlay" id="ocModal">
+  <div class="oc-modal">
+    <button class="oc-close" onclick="closeModal()">&times;</button>
+    <h2>免费咨询</h2>
+    <p>留下您的信息，我们将在24小时内与您联系</p>
+    <form id="ocForm" onsubmit="submitForm(event)">
+      <label>姓名</label>
+      <input type="text" id="ocName" placeholder="您的称呼" required>
+      <label>联系方式（微信/手机/邮箱）</label>
+      <input type="text" id="ocContact" placeholder="方便联系您的方式" required>
+      <label>需求描述</label>
+      <textarea id="ocMessage" placeholder="简单描述您的需求..."></textarea>
+      <button type="submit" class="oc-submit">提交咨询</button>
+    </form>
+  </div>
+</div>
+<div class="oc-toast" id="ocToast">提交成功！我们会尽快联系您</div>
+
+<script>
+// 咨询弹窗
+function openModal(){document.getElementById('ocModal').classList.add('active')}
+function closeModal(){document.getElementById('ocModal').classList.remove('active')}
+document.getElementById('ocModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+// 表单提交 → 通过 mailto 发送（不暴露任何 API 密钥）
+function submitForm(e){
+  e.preventDefault();
+  var name=document.getElementById('ocName').value;
+  var contact=document.getElementById('ocContact').value;
+  var msg=document.getElementById('ocMessage').value;
+  var subject=encodeURIComponent('[Landing Page] '+name+' 咨询');
+  var body=encodeURIComponent('姓名: '+name+'\n联系方式: '+contact+'\n需求: '+msg);
+  window.location.href='mailto:liuhongming@xfuture.cc?subject='+subject+'&body='+body;
+  document.getElementById('ocToast').style.display='block';
+  setTimeout(function(){document.getElementById('ocToast').style.display='none'},3000);
+  closeModal();
+  document.getElementById('ocForm').reset();
+}
+
+// 绑定所有按钮
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('button').forEach(function(btn){
+    var t=btn.textContent.trim();
+    if(!btn.onclick && !btn.getAttribute('onclick')){
+      if(t.match(/咨询|诊断|开始|预约|选择|联系|试用/)){
+        btn.addEventListener('click',openModal);
+      }else if(t.match(/了解更多|服务细节|手册/)){
+        var target=document.getElementById('features')||document.getElementById('process');
+        if(target){btn.addEventListener('click',function(){target.scrollIntoView({behavior:'smooth'})});}
+        else{btn.addEventListener('click',openModal);}
+      }
+    }
+  });
+  document.querySelectorAll('a[href="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();openModal()});
+  });
+});
+</script>
+</body>
+</html>
